@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShakeOnIt • Friendly Bets</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .bet-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .bet-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white h-full overflow-hidden">
+  <div class="max-w-[420px] mx-auto bg-zinc-950 min-h-screen flex flex-col" id="app">
+    
+    <!-- BOTTOM NAV -->
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] bg-zinc-900 border-t border-zinc-800 z-50">
+      <div class="flex justify-around py-2 text-xs">
+        <button onclick="showTab(0)" class="flex flex-col items-center text-emerald-400 tab-btn active">
+          <i class="fa-solid fa-house text-xl mb-1"></i>
+          <span>Home</span>
+        </button>
+        <button onclick="showTab(1)" class="flex flex-col items-center text-zinc-400 tab-btn">
+          <i class="fa-solid fa-list text-xl mb-1"></i>
+          <span>Bets</span>
+        </button>
+        <button onclick="showTab(2)" class="flex flex-col items-center text-zinc-400 tab-btn">
+          <i class="fa-solid fa-trophy text-xl mb-1"></i>
+          <span>Score</span>
+        </button>
+        <button onclick="showTab(3)" class="flex flex-col items-center text-zinc-400 tab-btn">
+          <i class="fa-solid fa-user text-xl mb-1"></i>
+          <span>Me</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="bg-zinc-900 border-b border-zinc-800 px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-emerald-500 rounded-2xl flex items-center justify-center text-xl font-bold">🤝</div>
+        <div>
+          <span class="font-semibold text-2xl tracking-tighter">ShakeOnIt</span>
+        </div>
+      </div>
+      <div onclick="newBet()" class="bg-emerald-500 text-black px-5 py-2 rounded-3xl font-semibold flex items-center gap-2 cursor-pointer active:scale-95">
+        <i class="fa-solid fa-plus"></i>
+        <span>New Bet</span>
+      </div>
+    </div>
+
+    <!-- TAB 0: HOME / GROUP FEED -->
+    <div id="tab-0" class="flex-1 overflow-auto p-4 space-y-6 pb-20">
+      <div class="text-center py-8">
+        <div class="text-5xl mb-4">👋</div>
+        <h1 class="text-3xl font-bold">Welcome back, Joshua!</h1>
+        <p class="text-zinc-400">Your crew has 7 active bets</p>
+      </div>
+
+      <div class="flex gap-3 overflow-x-auto pb-4 snap-x">
+        <div onclick="switchGroup(0)" class="group-snap bg-zinc-800 rounded-3xl px-5 py-3 min-w-[140px] snap-center active:bg-emerald-900">
+          <div class="font-medium">Friday Crew</div>
+          <div class="text-emerald-400 text-sm">12 bets • 4 active</div>
+        </div>
+        <div onclick="switchGroup(1)" class="group-snap bg-zinc-800 rounded-3xl px-5 py-3 min-w-[140px] snap-center">
+          <div class="font-medium">Basketball Bros</div>
+          <div class="text-emerald-400 text-sm">8 bets • 2 active</div>
+        </div>
+      </div>
+
+      <div class="space-y-4" id="active-bets">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- TAB 1: ALL BETS -->
+    <div id="tab-1" class="flex-1 overflow-auto p-4 pb-20 hidden">
+      <h2 class="font-semibold text-xl mb-4">All Bets</h2>
+      <div class="space-y-4" id="all-bets"></div>
+    </div>
+
+    <!-- TAB 2: SCOREBOARD -->
+    <div id="tab-2" class="flex-1 overflow-auto p-4 pb-20 hidden">
+      <h2 class="font-semibold text-xl mb-4">🏆 Group Leaderboard</h2>
+      <div id="scoreboard" class="space-y-3">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- TAB 3: PROFILE -->
+    <div id="tab-3" class="flex-1 overflow-auto p-4 pb-20 hidden">
+      <div class="text-center pt-8">
+        <div class="w-24 h-24 bg-zinc-700 rounded-full mx-auto flex items-center justify-center text-6xl">🧔</div>
+        <h2 class="font-semibold text-2xl mt-4">Joshua</h2>
+        <p class="text-emerald-400">42 wins • 18 losses • 🔥 7 win streak</p>
+      </div>
+      <div class="mt-10 bg-zinc-900 rounded-3xl p-5 space-y-4">
+        <div class="flex justify-between"><span class="text-zinc-400">Total points</span><span class="font-mono">1,240</span></div>
+        <div class="flex justify-between"><span class="text-zinc-400">Most accurate</span><span>Red Skittles bets</span></div>
+        <div class="flex justify-between"><span class="text-zinc-400">Bragging rights owed</span><span class="text-emerald-400">3</span></div>
+      </div>
+      <button onclick="alert('Settings coming in full version!')" class="w-full mt-8 bg-zinc-800 hover:bg-zinc-700 py-4 rounded-3xl text-sm font-medium">
+        Settings &amp; Export History
+      </button>
+    </div>
+
+    <!-- NEW BET MODAL -->
+    <div id="new-bet-modal" class="hidden fixed inset-0 bg-black/80 flex items-end">
+      <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[85vh] overflow-auto">
+        <div class="p-4 border-b border-zinc-700 flex justify-between sticky top-0 bg-zinc-900">
+          <div class="font-semibold text-xl">New Handshake Bet</div>
+          <button onclick="closeModal()" class="text-3xl leading-none">×</button>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          <div>
+            <div class="text-sm text-zinc-400 mb-2">What are we betting on?</div>
+            <input id="bet-title" type="text" placeholder="Over/Under red Skittles in the bag" 
+                   class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-4 text-lg focus:outline-none focus:border-emerald-500">
+          </div>
+
+          <div>
+            <div class="text-sm text-zinc-400 mb-2">Type</div>
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="selectType(this)" data-type="overunder" class="type-btn bg-zinc-800 hover:bg-emerald-900 p-4 rounded-2xl text-left active:scale-95">Over / Under</button>
+              <button onclick="selectType(this)" data-type="exact" class="type-btn bg-zinc-800 hover:bg-emerald-900 p-4 rounded-2xl text-left active:scale-95">Exact Number</button>
+              <button onclick="selectType(this)" data-type="yesno" class="type-btn bg-zinc-800 hover:bg-emerald-900 p-4 rounded-2xl text-left active:scale-95">Yes / No</button>
+              <button onclick="selectType(this)" data-type="h2h" class="type-btn bg-zinc-800 hover:bg-emerald-900 p-4 rounded-2xl text-left active:scale-95">Head-to-Head</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm text-zinc-400 mb-2">Stakes (fun only!)</div>
+            <input id="bet-stakes" type="text" value="bragging rights + 10 pushups" 
+                   class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-4">
+          </div>
+
+          <button onclick="createBet()" 
+                  class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-semibold py-5 rounded-3xl text-xl active:scale-95">
+            Shake On It → Share Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BET DETAIL MODAL -->
+    <div id="bet-detail-modal" class="hidden fixed inset-0 bg-black/80 flex items-end">
+      <div class="bg-zinc-900 w-full rounded-t-3xl max-h-[90vh] overflow-auto" id="bet-detail-content">
+        <!-- JS injected -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Local data
+    let currentGroup = "Friday Crew";
+    let bets = JSON.parse(localStorage.getItem('shakeonit_bets')) || [
+      {
+        id: 1,
+        title: "Over/Under red Skittles in this bag",
+        type: "overunder",
+        stakes: "10 pushups",
+        status: "active",
+        participants: ["You", "Alex", "Sam"],
+        deadline: "Today",
+        result: null
+      },
+      {
+        id: 2,
+        title: "First to 20 free throws",
+        type: "h2h",
+        stakes: "buy lunch",
+        status: "active",
+        participants: ["You", "Jordan"],
+        deadline: "Tomorrow",
+        result: null
+      }
+    ];
+
+    let scores = JSON.parse(localStorage.getItem('shakeonit_scores')) || {
+      "You": { wins: 42, losses: 18, points: 1240 },
+      "Alex": { wins: 35, losses: 22, points: 980 },
+      "Sam": { wins: 28, losses: 31, points: 650 }
+    };
+
+    function saveData() {
+      localStorage.setItem('shakeonit_bets', JSON.stringify(bets));
+      localStorage.setItem('shakeonit_scores', JSON.stringify(scores));
+    }
+
+    function renderActiveBets() {
+      const container = document.getElementById('active-bets');
+      container.innerHTML = bets.map(bet => `
+        <div onclick="openBet(${bet.id})" class="bet-card bg-zinc-900 border border-zinc-800 rounded-3xl p-5 cursor-pointer">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-medium text-lg leading-tight">${bet.title}</div>
+              <div class="text-emerald-400 text-sm mt-1">${bet.stakes}</div>
+            </div>
+            <div class="bg-zinc-800 text-xs px-3 py-1 rounded-2xl">${bet.deadline}</div>
+          </div>
+          <div class="flex gap-2 mt-6">
+            \( {bet.participants.map(p => `<div class="text-xs bg-zinc-800 px-3 py-1 rounded-2xl"> \){p}</div>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAllBets() {
+      const container = document.getElementById('all-bets');
+      container.innerHTML = bets.map(bet => `
+        <div onclick="openBet(${bet.id})" class="bet-card bg-zinc-900 border border-zinc-800 rounded-3xl p-5 cursor-pointer">
+          <div class="font-medium">${bet.title}</div>
+          <div class="text-sm text-zinc-400 mt-1">${bet.stakes} • ${bet.participants.length} friends</div>
+        </div>
+      `).join('');
+    }
+
+    function renderScoreboard() {
+      const container = document.getElementById('scoreboard');
+      let html = '';
+      Object.keys(scores).forEach((name, i) => {
+        const s = scores[name];
+        html += `
+          <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-zinc-700 rounded-2xl flex items-center justify-center text-xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}</div>
+              <div>
+                <div class="font-medium">${name}</div>
+                <div class="text-xs text-zinc-400">${s.wins}W ${s.losses}L</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono text-2xl font-bold text-emerald-400">${s.points}</div>
+              <div class="text-xs text-zinc-400">points</div>
+            </div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function showTab(n) {
+      document.querySelectorAll('[id^="tab-"]').forEach(t => t.classList.add('hidden'));
+      document.getElementById(`tab-${n}`).classList.remove('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-emerald-400'));
+      document.querySelectorAll('.tab-btn')[n].classList.add('active', 'text-emerald-400');
+    }
+
+    function newBet() {
+      document.getElementById('new-bet-modal').classList.remove('hidden');
+      document.getElementById('bet-title').focus();
+    }
+
+    function closeModal() {
+      document.getElementById('new-bet-modal').classList.add('hidden');
+      document.getElementById('bet-detail-modal').classList.add('hidden');
+    }
+
+    let selectedType = 'overunder';
+    function selectType(el) {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('bg-emerald-900', 'text-emerald-400'));
+      el.classList.add('bg-emerald-900', 'text-emerald-400');
+      selectedType = el.getAttribute('data-type');
+    }
+
+    function createBet() {
+      const title = document.getElementById('bet-title').value || "New casual bet";
+      const stakes = document.getElementById('bet-stakes').value || "bragging rights";
+      
+      const newBet = {
+        id: Date.now(),
+        title: title,
+        type: selectedType,
+        stakes: stakes,
+        status: "active",
+        participants: ["You", "Alex"],
+        deadline: "In 2 days",
+        result: null
+      };
+      
+      bets.unshift(newBet);
+      saveData();
+      renderActiveBets();
+      renderAllBets();
+      closeModal();
+      
+      // Auto-open the new bet
+      setTimeout(() => openBet(newBet.id), 400);
+    }
+
+    function openBet(id) {
+      const bet = bets.find(b => b.id === id);
+      if (!bet) return;
+      
+      const html = `
+        <div class="p-6">
+          <div class="flex justify-between items-start">
+            <div class="font-semibold text-2xl leading-tight pr-8">${bet.title}</div>
+            <button onclick="closeModal()" class="text-4xl leading-none">×</button>
+          </div>
+          
+          <div class="mt-8 bg-zinc-800 rounded-3xl p-6">
+            <div class="flex justify-between text-sm">
+              <div>Stakes</div>
+              <div class="font-medium text-emerald-400">${bet.stakes}</div>
+            </div>
+            <div class="h-px bg-zinc-700 my-6"></div>
+            <div class="flex justify-between text-sm">
+              <div>Participants</div>
+              <div class="flex gap-2">\( {bet.participants.map(p => `<span class="bg-zinc-700 px-4 py-1 rounded-2xl text-xs"> \){p}</span>`).join('')}</div>
+            </div>
+          </div>
+
+          <div class="mt-10">
+            <div class="text-xs uppercase tracking-widest text-zinc-400 mb-3">Settlement</div>
+            
+            <button onclick="settleBet(${bet.id}, 'win')" 
+                    class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-semibold py-6 rounded-3xl mb-3 active:scale-95">
+              I WON 👍 (photo proof)
+            </button>
+            
+            <button onclick="settleBet(${bet.id}, 'lose')" 
+                    class="w-full bg-zinc-700 hover:bg-zinc-600 font-semibold py-6 rounded-3xl mb-3 active:scale-95">
+              I LOST 👎
+            </button>
+            
+            <button onclick="voteGroup()" 
+                    class="w-full border border-zinc-600 text-zinc-400 hover:text-white py-6 rounded-3xl active:scale-95">
+              Group Vote / Referee
+            </button>
+          </div>
+
+          <div onclick="closeModal()" class="text-center text-xs text-zinc-500 mt-12 cursor-pointer">Close</div>
+        </div>
+      `;
+      
+      document.getElementById('bet-detail-content').innerHTML = html;
+      document.getElementById('bet-detail-modal').classList.remove('hidden');
+    }
+
+    function settleBet(id, outcome) {
+      const bet = bets.find(b => b.id === id);
+      if (!bet) return;
+      
+      if (outcome === 'win') {
+        scores["You"].wins++;
+        scores["You"].points += 50;
+      } else {
+        scores["You"].losses++;
+      }
+      
+      bet.status = "settled";
+      bet.result = outcome;
+      
+      saveData();
+      renderActiveBets();
+      renderScoreboard();
+      alert(`✅ Bet settled! ${outcome === 'win' ? 'You won bragging rights 🎉' : 'Better luck next time!'}`);
+      closeModal();
+    }
+
+    function voteGroup() {
+      alert("📲 In the full app this would open group vote or referee mode.\n\nFor now: imagine everyone votes and the winner gets points automatically.");
+    }
+
+    function switchGroup(n) {
+      alert("Group switched! (demo only)");
+    }
+
+    // Init
+    window.onload = function() {
+      renderActiveBets();
+      renderAllBets();
+      renderScoreboard();
+      showTab(0);
+      
+      // Tailwind script already loaded
+      console.log('%c✅ ShakeOnIt demo ready! Copy this entire file and open in any browser.', 'color:#10b981; font-size:13px');
+    }
+  </script>
+</body>
+</html>
