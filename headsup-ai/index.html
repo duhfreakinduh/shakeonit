@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="HeadsUp AI helps families stay ahead of home, pool, and vehicle maintenance before small problems become expensive.">
+  <title>HeadsUp AI</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand-row">
+          <div class="brand-mark">H</div>
+          <div>
+            <div class="brand">HeadsUp AI</div>
+            <div class="brand-sub">Fix it before it fixes your wallet.</div>
+          </div>
+        </div>
+      </div>
+      <button id="installBtn" class="ghost small hidden" type="button">Install</button>
+    </header>
+
+    <main id="view" class="view" aria-live="polite"></main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-btn active" data-tab="home" type="button"><span>⌂</span><small>Home</small></button>
+      <button class="nav-btn" data-tab="plan" type="button"><span>✓</span><small>Plan</small></button>
+      <button class="nav-btn ai-nav" data-tab="ai" type="button"><span>✦</span><small>Ask AI</small></button>
+      <button class="nav-btn" data-tab="history" type="button"><span>↺</span><small>History</small></button>
+      <button class="nav-btn" data-tab="me" type="button"><span>☺</span><small>Me</small></button>
+    </nav>
+  </div>
+
+  <dialog id="taskDialog" class="sheet">
+    <form method="dialog" id="taskForm">
+      <div class="sheet-head">
+        <div>
+          <div class="eyebrow">CUSTOM MAINTENANCE</div>
+          <h2>Add something to track</h2>
+        </div>
+        <button class="icon-btn" value="cancel" aria-label="Close">×</button>
+      </div>
+      <label>What needs attention?
+        <input id="customTitle" required maxlength="80" placeholder="Example: Clean bedroom AC filter">
+      </label>
+      <div class="two-col">
+        <label>Category
+          <select id="customCategory">
+            <option>Home</option><option>Pool</option><option>Vehicle</option><option>Safety</option><option>Other</option>
+          </select>
+        </label>
+        <label>Repeat every
+          <select id="customInterval">
+            <option value="7">1 week</option><option value="30">1 month</option><option value="60">2 months</option><option value="90" selected>3 months</option><option value="180">6 months</option><option value="365">1 year</option>
+          </select>
+        </label>
+      </div>
+      <div class="two-col">
+        <label>Typical low cost
+          <input id="customLow" type="number" min="0" step="1" value="0">
+        </label>
+        <label>Typical high cost
+          <input id="customHigh" type="number" min="0" step="1" value="25">
+        </label>
+      </div>
+      <label>Notes
+        <textarea id="customNotes" rows="3" maxlength="300" placeholder="Size, brand, location, or anything worth remembering"></textarea>
+      </label>
+      <button class="primary wide" value="default" type="submit">Add to my plan</button>
+    </form>
+  </dialog>
+
+  <dialog id="taskDetailDialog" class="sheet"><div id="taskDetail"></div></dialog>
+
+  <dialog id="feedbackDialog" class="sheet">
+    <form method="dialog" id="feedbackForm">
+      <div class="sheet-head"><div><div class="eyebrow">TESTER FEEDBACK</div><h2>How did HeadsUp do?</h2></div><button class="icon-btn" value="cancel">×</button></div>
+      <label>Rating
+        <select id="feedbackRating"><option value="5">5 - Very useful</option><option value="4">4 - Good</option><option value="3">3 - Okay</option><option value="2">2 - Needs work</option><option value="1">1 - Bad</option></select>
+      </label>
+      <label>What happened?
+        <textarea id="feedbackText" rows="5" maxlength="700" placeholder="What worked, what was confusing, or what answer was wrong?"></textarea>
+      </label>
+      <button class="primary wide" type="submit" value="default">Save feedback</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
