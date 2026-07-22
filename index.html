@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#09090b">
-  <meta name="description" content="ShakeOnIt friendly bets with a multiplayer Dreidel bonus game.">
+  <meta name="description" content="ShakeOnIt friendly challenges with an offline bonus arcade: Dreidel, Mega Tic-Tac-Toe, Dots & Boxes, Memory Match, and Quick Tap.">
   <title>ShakeOnIt • Friendly Challenges</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="bonus.css">
 </head>
 <body>
   <div class="app" id="app">
@@ -15,7 +18,7 @@
         <div class="brand-mark">🤝</div>
         <div>
           <div class="brand-title">ShakeOnIt</div>
-          <div class="brand-subtitle">Points, challenges &amp; bragging rights</div>
+          <div class="brand-subtitle">Points, challenges &amp; offline games</div>
         </div>
       </div>
       <button class="primary-btn" id="newBetHeader" onclick="openNewBet()">＋ New Bet</button>
@@ -33,7 +36,7 @@
       <button class="nav-btn active" data-tab="home" onclick="showTab('home')"><span class="nav-icon">⌂</span><span>Home</span></button>
       <button class="nav-btn" data-tab="bets" onclick="showTab('bets')"><span class="nav-icon">☷</span><span>Bets</span></button>
       <button class="nav-btn" data-tab="score" onclick="showTab('score')"><span class="nav-icon">🏆</span><span>Score</span></button>
-      <button class="nav-btn" data-tab="bonus" onclick="showTab('bonus')"><span class="nav-icon">🌀</span><span>Bonus</span></button>
+      <button class="nav-btn" data-tab="bonus" onclick="showTab('bonus')"><span class="nav-icon">🎮</span><span>Bonus</span></button>
       <button class="nav-btn" data-tab="me" onclick="showTab('me')"><span class="nav-icon">●</span><span>Me</span></button>
     </nav>
   </div>
@@ -44,6 +47,7 @@
         <div><div class="eyebrow">Friendly challenge</div><h2 id="newBetTitle" style="margin:2px 0 0">New Handshake Bet</h2></div>
         <button class="icon-btn" onclick="closeModal('newBetModal')" aria-label="Close">✕</button>
       </div>
+
       <form class="modal-body form-grid" onsubmit="createBet(event)">
         <label>What are you betting on?
           <input id="betTitleInput" maxlength="100" placeholder="Example: First person to make 10 free throws" required>
@@ -94,6 +98,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <script src="app-core.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
