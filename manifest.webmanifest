@@ -1,0 +1,19 @@
+{
+  "name": "ShakeOnIt Offline Arcade",
+  "short_name": "ShakeOnIt",
+  "description": "Friendly challenges and offline bonus games for family and friends.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
