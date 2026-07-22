@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <meta name="description" content="ShakeOnIt friendly bets with a multiplayer Dreidel bonus game.">
+  <title>ShakeOnIt • Friendly Challenges</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark">🤝</div>
+        <div>
+          <div class="brand-title">ShakeOnIt</div>
+          <div class="brand-subtitle">Points, challenges &amp; bragging rights</div>
+        </div>
+      </div>
+      <button class="primary-btn" id="newBetHeader" onclick="openNewBet()">＋ New Bet</button>
+    </header>
+
+    <main>
+      <section id="tab-home" class="tab-view"></section>
+      <section id="tab-bets" class="tab-view hidden"></section>
+      <section id="tab-score" class="tab-view hidden"></section>
+      <section id="tab-bonus" class="tab-view hidden"></section>
+      <section id="tab-me" class="tab-view hidden"></section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-btn active" data-tab="home" onclick="showTab('home')"><span class="nav-icon">⌂</span><span>Home</span></button>
+      <button class="nav-btn" data-tab="bets" onclick="showTab('bets')"><span class="nav-icon">☷</span><span>Bets</span></button>
+      <button class="nav-btn" data-tab="score" onclick="showTab('score')"><span class="nav-icon">🏆</span><span>Score</span></button>
+      <button class="nav-btn" data-tab="bonus" onclick="showTab('bonus')"><span class="nav-icon">🌀</span><span>Bonus</span></button>
+      <button class="nav-btn" data-tab="me" onclick="showTab('me')"><span class="nav-icon">●</span><span>Me</span></button>
+    </nav>
+  </div>
+
+  <div id="newBetModal" class="modal hidden" onclick="backdropClose(event, 'newBetModal')">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="newBetTitle">
+      <div class="modal-head">
+        <div><div class="eyebrow">Friendly challenge</div><h2 id="newBetTitle" style="margin:2px 0 0">New Handshake Bet</h2></div>
+        <button class="icon-btn" onclick="closeModal('newBetModal')" aria-label="Close">✕</button>
+      </div>
+      <form class="modal-body form-grid" onsubmit="createBet(event)">
+        <label>What are you betting on?
+          <input id="betTitleInput" maxlength="100" placeholder="Example: First person to make 10 free throws" required>
+        </label>
+
+        <div>
+          <div class="small" style="font-weight:800;margin-bottom:8px">Bet type</div>
+          <div class="type-grid">
+            <button type="button" class="type-btn active" data-type="overunder" onclick="selectBetType(this)">Over / Under</button>
+            <button type="button" class="type-btn" data-type="exact" onclick="selectBetType(this)">Exact Number</button>
+            <button type="button" class="type-btn" data-type="yesno" onclick="selectBetType(this)">Yes / No</button>
+            <button type="button" class="type-btn" data-type="h2h" onclick="selectBetType(this)">Head-to-Head</button>
+          </div>
+        </div>
+
+        <label>Fun stakes only
+          <input id="betStakesInput" maxlength="80" value="Bragging rights + 10 pushups" placeholder="Bragging rights, chores, pushups...">
+        </label>
+
+        <label>Players, separated by commas
+          <input id="betPlayersInput" maxlength="160" placeholder="Joshua, Alex, Sam">
+        </label>
+
+        <div class="two-col">
+          <label>Group
+            <select id="betGroupInput"></select>
+          </label>
+          <label>Deadline
+            <select id="betDeadlineInput">
+              <option>Today</option>
+              <option>Tomorrow</option>
+              <option selected>In 2 days</option>
+              <option>This week</option>
+              <option>No deadline</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="primary-btn full" type="submit">🤝 Shake On It</button>
+        <p class="muted small" style="text-align:center;margin:0">For friendly points and challenges only. No real-money gambling.</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal hidden" onclick="backdropClose(event, 'detailModal')">
+    <div class="modal-sheet" id="detailSheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
