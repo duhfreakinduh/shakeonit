@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#09090b">
-  <meta name="description" content="ShakeOnIt friendly challenges with an offline bonus arcade: Dreidel, Mega Tic-Tac-Toe, Dots & Boxes, Memory Match, and Quick Tap.">
+  <meta name="description" content="ShakeOnIt friendly challenges with an on-device AI judge and offline bonus arcade games.">
   <title>ShakeOnIt • Friendly Challenges</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="bonus.css">
+  <link rel="stylesheet" href="ai-judge.css">
 </head>
 <body>
   <div class="app" id="app">
@@ -18,7 +19,7 @@
         <div class="brand-mark">🤝</div>
         <div>
           <div class="brand-title">ShakeOnIt</div>
-          <div class="brand-subtitle">Points, challenges &amp; offline games</div>
+          <div class="brand-subtitle">Challenges, AI judging &amp; offline games</div>
         </div>
       </div>
       <button class="primary-btn" id="newBetHeader" onclick="openNewBet()">＋ New Bet</button>
@@ -63,6 +64,10 @@
           </div>
         </div>
 
+        <label>Exact winning rule <span class="muted small">(recommended for AI Judge)</span>
+          <textarea id="betRulesInput" rows="3" maxlength="500" placeholder="Example: First player to make 10 free throws wins. A shot only counts if both feet start behind the line."></textarea>
+        </label>
+
         <label>Fun stakes only
           <input id="betStakesInput" maxlength="80" value="Bragging rights + 10 pushups" placeholder="Bragging rights, chores, pushups...">
         </label>
@@ -100,5 +105,6 @@
 
   <script src="app-core.js"></script>
   <script src="app.js"></script>
+  <script src="ai-judge.js"></script>
 </body>
 </html>
