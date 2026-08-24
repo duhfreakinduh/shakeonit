@@ -1,0 +1,47 @@
+.judge-v3-banner {
+  margin-bottom: 12px;
+  padding: 11px 12px;
+  border-radius: 13px;
+  display: grid;
+  gap: 3px;
+  border: 1px solid rgba(56, 189, 248, .25);
+  background: rgba(14, 116, 144, .12);
+}
+
+.judge-v3-banner strong {
+  font-size: .82rem;
+  color: #bae6fd;
+}
+
+.judge-v3-banner span {
+  font-size: .82rem;
+  line-height: 1.4;
+  color: #e4e4e7;
+}
+
+.judge-v3-banner.verified {
+  border-color: rgba(52, 211, 153, .28);
+  background: rgba(6, 78, 59, .14);
+}
+
+.judge-v3-banner.verified strong {
+  color: #a7f3d0;
+}
+
+.judge-v3-banner.fallback {
+  border-color: rgba(251, 191, 36, .28);
+  background: rgba(120, 53, 15, .13);
+}
+
+.judge-v3-banner.fallback strong {
+  color: #fde68a;
+}
+
+.judge-v3-banner.checking {
+  border-color: rgba(167, 139, 250, .28);
+  background: rgba(76, 29, 149, .13);
+}
+
+.judge-v3-banner.checking strong {
+  color: #ddd6fe;
+}
