@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shakeonit-offline-v7';
+const CACHE_NAME = 'shakeonit-offline-v8';
 const APP_FILES = [
   './',
   './index.html',

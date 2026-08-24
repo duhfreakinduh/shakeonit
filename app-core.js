@@ -1,6 +1,7 @@
 'use strict';
 
-const STORAGE_KEY = 'shakeonit_v2';
+const STORAGE_KEY = 'shakeonit_v3';
+const LEGACY_STORAGE_KEYS = ['shakeonit_v2', 'shakeonit_bets', 'shakeonit_scores'];
 const BET_FILTERS = ['active', 'all', 'settled'];
 const DREIDEL_SIDES = [
   { key: 'nun', letter: 'נ', name: 'Nun', plain: 'Nothing happens. Keep the same number of tokens.' },
@@ -11,39 +12,45 @@ const DREIDEL_SIDES = [
 
 const defaultState = {
   profile: { name: 'Joshua' },
-  currentGroup: 'Friday Crew',
-  groups: ['Friday Crew', 'Basketball Bros'],
+  currentGroup: 'Friends',
+  groups: ['Friends'],
   bets: [
     {
-      id: 1,
-      title: 'Over or under: red Skittles in this bag',
-      type: 'overunder',
-      stakes: '10 pushups',
+      id: 101,
+      title: 'Example: First to make 10 free throws',
+      type: 'h2h',
+      stakes: 'Bragging rights',
+      rules: 'The first player to make 10 free throws wins.',
       status: 'active',
-      participants: ['Joshua', 'Alex', 'Sam'],
+      participants: ['Joshua', 'Alex'],
       deadline: 'Today',
-      group: 'Friday Crew',
+      group: 'Friends',
       result: null,
-      createdAt: Date.now() - 500000
+      winner: null,
+      aiJudgment: null,
+      example: true,
+      createdAt: Date.now() - 2000
     },
     {
-      id: 2,
-      title: 'First person to make 20 free throws',
+      id: 102,
+      title: 'Example: Longest wall sit',
       type: 'h2h',
-      stakes: 'Winner picks lunch',
+      stakes: 'Winner picks the music',
+      rules: 'The player with the longest continuous wall-sit time wins.',
       status: 'active',
-      participants: ['Joshua', 'Jordan'],
-      deadline: 'Tomorrow',
-      group: 'Basketball Bros',
+      participants: ['Joshua', 'Alex'],
+      deadline: 'No deadline',
+      group: 'Friends',
       result: null,
-      createdAt: Date.now() - 300000
+      winner: null,
+      aiJudgment: null,
+      example: true,
+      createdAt: Date.now() - 1000
     }
   ],
   scores: {
-    Joshua: { wins: 42, losses: 18, points: 1240 },
-    Alex: { wins: 35, losses: 22, points: 980 },
-    Sam: { wins: 28, losses: 31, points: 650 },
-    Jordan: { wins: 18, losses: 14, points: 520 }
+    Joshua: { wins: 0, losses: 0, points: 0 },
+    Alex: { wins: 0, losses: 0, points: 0 }
   },
   dreidel: {
     setupComplete: false,
@@ -75,25 +82,11 @@ function loadState() {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (stored && stored.bets && stored.scores && stored.dreidel) return mergeState(stored);
 
-    const oldBets = JSON.parse(localStorage.getItem('shakeonit_bets'));
-    const oldScores = JSON.parse(localStorage.getItem('shakeonit_scores'));
-    const migrated = deepCopy(defaultState);
-    if (Array.isArray(oldBets)) {
-      migrated.bets = oldBets.map((bet, index) => ({
-        ...bet,
-        id: bet.id || Date.now() + index,
-        participants: (bet.participants || ['Joshua', 'Alex']).map(name => name === 'You' ? 'Joshua' : name),
-        group: bet.group || 'Friday Crew',
-        createdAt: bet.createdAt || Date.now() - index
-      }));
-    }
-    if (oldScores && typeof oldScores === 'object') {
-      migrated.scores = {};
-      Object.entries(oldScores).forEach(([name, score]) => {
-        migrated.scores[name === 'You' ? 'Joshua' : name] = score;
-      });
-    }
-    return migrated;
+    // One-time fresh start: ignore/remove older test data and seed only two examples.
+    LEGACY_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+    const fresh = deepCopy(defaultState);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+    return fresh;
   } catch (error) {
     console.warn('Could not load saved game data.', error);
     return deepCopy(defaultState);
@@ -165,14 +158,14 @@ function renderHome() {
   const profileScore = getProfileScore();
   const groupBets = activeBets().filter(bet => bet.group === state.currentGroup);
   document.getElementById('tab-home').innerHTML = `
-    <div class="hero"><div class="hero-emoji">👋</div><h1>Welcome back, ${escapeHtml(state.profile.name)}!</h1><p class="muted">Make friendly challenges, settle the result, and keep the bragging rights honest.</p></div>
+    <div class="hero"><div class="hero-emoji">👋</div><h1>Welcome, ${escapeHtml(state.profile.name)}!</h1><p class="muted">Start with the two examples below, or delete them and make your own challenge.</p></div>
     <div class="stat-grid"><div class="stat"><strong>${activeBets().length}</strong><span>Active bets</span></div><div class="stat"><strong>${profileScore.wins}</strong><span>Wins</span></div><div class="stat"><strong>${profileScore.points}</strong><span>Points</span></div></div>
     <div class="section-head"><h2>Your groups</h2><button class="ghost-btn" onclick="addGroup()">＋ Group</button></div>
     <div class="group-row">${state.groups.map(group => `<button class="chip ${group === state.currentGroup ? 'active' : ''}" onclick="switchGroup('${encodeURIComponent(group)}')">${escapeHtml(group)}</button>`).join('')}</div>
     <div class="section-head"><h2>${escapeHtml(state.currentGroup)}</h2><button class="ghost-btn" onclick="showTab('bets')">See all</button></div>
-    <div class="stack">${groupBets.length ? groupBets.slice(0, 4).map(betCard).join('') : emptyState('No active bets in this group yet.', 'Create a new bet to get the crew started.')}</div>
+    <div class="stack">${groupBets.length ? groupBets.slice(0, 4).map(betCard).join('') : emptyState('No active bets in this group yet.', 'Create a new bet to get started.')}</div>
     <div class="section-head"><h2>Bonus game</h2></div>
-    <div class="card bonus-hero" onclick="showTab('bonus')" role="button" tabindex="0"><span class="bonus-pill">NEW BONUS GAME</span><h2 style="font-size:1.75rem;margin-top:10px">Tap-to-Spin Dreidel</h2><p style="margin-bottom:0;color:#dbeafe">4–10 players • automatic tokens • plain-English results</p></div>`;
+    <div class="card bonus-hero" onclick="showTab('bonus')" role="button" tabindex="0"><span class="bonus-pill">BONUS GAME</span><h2 style="font-size:1.75rem;margin-top:10px">Tap-to-Spin Dreidel</h2><p style="margin-bottom:0;color:#dbeafe">4–10 players • automatic tokens • plain-English results</p></div>`;
 }
 
 function betCard(bet) {
