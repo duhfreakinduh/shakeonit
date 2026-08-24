@@ -1,0 +1,142 @@
+/* ShakeOnIt visual evidence */
+
+.ai-vision-evidence {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-vision-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ai-vision-head > div {
+  display: grid;
+  gap: 3px;
+}
+
+.ai-photo-drop {
+  border: 1px dashed rgba(56, 189, 248, .45);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(14, 116, 144, .10);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ai-photo-drop:hover,
+.ai-photo-drop:focus-within {
+  border-color: rgba(125, 211, 252, .8);
+  background: rgba(14, 116, 144, .16);
+}
+
+.ai-photo-drop strong,
+.ai-photo-drop small {
+  display: block;
+}
+
+.ai-photo-drop small {
+  color: #a1a1aa;
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
+.ai-photo-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: rgba(56, 189, 248, .15);
+  color: #bae6fd;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.ai-vision-previews {
+  display: grid;
+  gap: 8px;
+}
+
+.ai-vision-thumb {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.ai-vision-thumb img {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #09090b;
+}
+
+.ai-vision-thumb > div {
+  min-width: 0;
+}
+
+.ai-vision-thumb strong,
+.ai-vision-thumb small {
+  display: block;
+}
+
+.ai-vision-thumb small {
+  color: #a1a1aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 3px;
+}
+
+.ai-visual-ruling-card {
+  margin: 12px 0;
+}
+
+.ai-visual-observation-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ai-visual-observation {
+  padding: 10px 11px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .18);
+}
+
+.ai-visual-observation p {
+  margin: 6px 0;
+  line-height: 1.45;
+  color: #d4d4d8;
+}
+
+.ai-evidence-audit {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(14, 116, 144, .10);
+  border: 1px solid rgba(56, 189, 248, .20);
+  display: grid;
+  gap: 4px;
+}
+
+@media (max-width: 420px) {
+  .ai-vision-head {
+    align-items: center;
+  }
+
+  .ai-photo-drop {
+    padding: 12px;
+  }
+}
