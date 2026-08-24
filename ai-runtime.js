@@ -26,7 +26,10 @@ const visionRenderWithEvidenceCleanup = renderAiJudgeForm;
 renderAiJudgeForm = function cleanedRenderAiJudgeForm(bet, preserved = {}) {
   const cleaned = { ...preserved };
   if (typeof cleaned.evidence === 'string') cleaned.evidence = stripGeneratedVisualEvidence(cleaned.evidence);
-  return visionRenderWithEvidenceCleanup(bet, cleaned);
+  const result = visionRenderWithEvidenceCleanup(bet, cleaned);
+  // Keep the main picker open to screenshots/gallery instead of forcing camera-only capture.
+  document.getElementById('aiVisionInput')?.removeAttribute('capture');
+  return result;
 };
 
 function stripGeneratedVisualEvidence(value) {
