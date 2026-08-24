@@ -1,13 +1,16 @@
-const CACHE_NAME = 'shakeonit-offline-v4';
+const CACHE_NAME = 'shakeonit-offline-v5';
 const APP_FILES = [
   './',
   './index.html',
   './styles.css',
   './bonus.css',
   './ai-judge.css',
+  './ai-vision.css',
   './app-core.js',
   './app.js',
   './ai-judge.js',
+  './ai-vision.js',
+  './ai-runtime.js',
   './manifest.webmanifest',
   './icon.svg'
 ];
