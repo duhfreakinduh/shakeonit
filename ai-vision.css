@@ -131,6 +131,34 @@
   gap: 4px;
 }
 
+.ai-runtime-error {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(248, 113, 113, .35);
+  background: rgba(127, 29, 29, .16);
+  color: #fecaca;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.ai-runtime-error strong,
+.ai-runtime-error span,
+.ai-runtime-error small {
+  display: block;
+}
+
+.ai-runtime-error span {
+  color: #e4e4e7;
+  line-height: 1.4;
+}
+
+.ai-runtime-error small {
+  color: #a1a1aa;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 420px) {
   .ai-vision-head {
     align-items: center;
